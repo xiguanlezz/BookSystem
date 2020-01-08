@@ -1,6 +1,8 @@
 # BookSystem
 基于Servlet和JSP的书城系统
 
+数据库表的设计、前端模板和一些jar包，见https://blog.csdn.net/cj1561435010/article/details/103881537
+
 一、管理员端明细<br>
 ① 用户管理明细
 新增用户，修改用户，单个删除、批量删除用户，关键字模糊查询，自定义分页查询，查询所有用户。
