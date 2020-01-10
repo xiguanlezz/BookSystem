@@ -1,28 +1,40 @@
 package com.cj.dao;
 
+import org.apache.commons.dbcp.BasicDataSource;
+
 import java.sql.*;
 
 public class BaseDao {
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+
+    private static BasicDataSource basicdataSource;
 
     public static Connection getConnection() {
         Connection conn = null;
-        String dataBaseName = "keyshop";
-        String url = "jdbc:mysql://localhost:3306/" + dataBaseName +
-                "?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true";
-        String username = "root";
-        String pwd = "123456";
+
+        if (basicdataSource == null) {
+            basicdataSource = new BasicDataSource();
+            basicdataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+
+            String dataBaseName = "keyshop";
+            String url = "jdbc:mysql://localhost:3306/" + dataBaseName +
+                    "?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true";
+            String username = "root";
+            String pwd = "123456";
+            basicdataSource.setUrl(url);
+            basicdataSource.setUsername(username);
+            basicdataSource.setPassword(pwd);
+            basicdataSource.setMaxActive(20);
+            basicdataSource.setInitialSize(10);//数据库初始化时，创建的连接个数
+            basicdataSource.setMaxIdle(5);
+            basicdataSource.setMinIdle(1);
+            basicdataSource.setMaxWait(5 * 1000);
+        }
         try {
-            conn = DriverManager.getConnection(url, username, pwd);
+            conn = basicdataSource.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return conn;
     }
 
